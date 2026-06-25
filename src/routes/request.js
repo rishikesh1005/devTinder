@@ -6,7 +6,7 @@ const {userAuth} = require("../middleware/auth.js");
 const ConnectionRequest = require("../models/connectionRequest.js");
 const User = require("../models/user.js")
 
-requestRouter.post("/request/send/:status/:userId" , userAuth , async (req,res) => {
+requestRouter.post("/request/send/:status/:userId" , userAuth , async (req,res,next) => {
    
     try{ 
         const fromUserId = req.user._id
@@ -61,12 +61,12 @@ requestRouter.post("/request/send/:status/:userId" , userAuth , async (req,res) 
         })
     }
     catch(err){
-        res.status(400).send("ERROR : " + err.message );
+       next(err)
     }
 })
 
 
-requestRouter.post("/request/review/:status/:requestId" , userAuth , async (req ,res) => {
+requestRouter.post("/request/review/:status/:requestId" , userAuth , async (req ,res,next) => {
     try{
         const loggedInUser = req.user;
         const {status , requestId} = req.params;
@@ -98,7 +98,7 @@ requestRouter.post("/request/review/:status/:requestId" , userAuth , async (req 
 
     }
     catch(err){
-        res.status(400).send("Error :" + err.message);
+        next(err)
     }
 })
 

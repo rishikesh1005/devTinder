@@ -4,11 +4,17 @@ const validateSignUpData = (req) => {
     const {firstName, lastName , emailId , password} = req.body;
 
     if(!firstName || !lastName){
-        throw new Error("Enter correct Name");
+        const err = new Error("Enter correct Name");
+        err.statusCode = 400;
+        throw err;
     }else if(!validator.isEmail(emailId)){
-        throw new Error("Enter valid emailID...");
+        const err = new Error("Enter valid emailID");
+        err.statusCode = 400;
+        throw err;
     }else if(!validator.isStrongPassword(password)){
-        throw new Error("Enter Strong Password...");
+        const err = new Error("Enter Strong Password");
+        err.statusCode = 400;
+        throw err;
     }
 };
 
@@ -24,15 +30,23 @@ const validateEditPassword = (req) => {
     const {emailId , newPassword , confirmPassword} = req.body;
 
     if(!emailId || !newPassword || !confirmPassword){
-        throw new Error("Enter all requires details")
+        const err = new Error("Enter all required details");
+        err.statusCode = 400;
+        throw err;
     }else if(!validator.isEmail(emailId)){
-        throw new Error("Enter valid emailID...");
+        const err = new Error("Enter valid emailID");
+        err.statusCode = 400;
+        throw err;
     }else if(!validator.isStrongPassword(newPassword)){
-        throw new Error("Enter Strong Password...");
+        const err = new Error("Enter Strong Password");
+        err.statusCode = 400;
+        throw err;
     }
 
     if(newPassword !== confirmPassword){
-        throw new Error("confirm Password incorrect!!!")
+       const err = new Error("Confirm Password incorrect");
+        err.statusCode = 400;
+        throw err;
     }
 
     const requiredDetails = ["emailId" , "newPassword" , "confirmPassword"]

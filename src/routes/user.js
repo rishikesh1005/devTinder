@@ -7,7 +7,7 @@ const User = require("../models/user");
 
 const USER_SAFE_DATA = "firstName lastName age gender about skills photoUrl";
 
-userRouter.get("/user/requests/received" , userAuth , async(req,res) => {
+userRouter.get("/user/requests/received" , userAuth , async(req,res,next) => {
     try{
         const loggedInUser = req.user;
 
@@ -22,12 +22,12 @@ userRouter.get("/user/requests/received" , userAuth , async(req,res) => {
         })
     }
     catch(err){
-        res.status(400).send("ERROR : " + err.message)
+        next(err)
     }
 })
 
 
-userRouter.get("/user/connections" , userAuth , async (req,res) => {
+userRouter.get("/user/connections" , userAuth , async (req,res,next) => {
     try{
         const loggedInUser = req.user;
 
@@ -51,12 +51,12 @@ userRouter.get("/user/connections" , userAuth , async (req,res) => {
 
     }
     catch(err){
-        res.status(400).send("ERROR : " + err.message);
+        next(err)
     }
 })
 
 
-userRouter.get("/feed" , userAuth , async (req,res) => {
+userRouter.get("/feed" , userAuth , async (req,res,next) => {
     try{
         const loggedInUser = req.user;
 
@@ -95,7 +95,7 @@ userRouter.get("/feed" , userAuth , async (req,res) => {
 
     }
     catch(err){
-        res.status(400).send("ERROR : " + err.message);
+        next(err)
     }
 })
 

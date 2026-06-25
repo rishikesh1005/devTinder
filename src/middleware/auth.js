@@ -5,7 +5,9 @@ const userAuth = async (req,res,next) => {
     try{
         const {token} = req.cookies;
         if(!token){
-            return res.status(401).send("Please Login!");
+            const err = new Error("Please Login!");
+            err.statusCode = 401;
+            return next(err);
         }
 
         const decodedData  = await jwt.verify(token , process.env.JWT_SECRET);
@@ -13,13 +15,15 @@ const userAuth = async (req,res,next) => {
         const { _id } = decodedData;
         const user = await User.findById(_id);
         if(!user){
-            throw new Error("user not found!!!");
+            const err = new Error("User does not exist");
+            err.statusCode = 404;
+            throw err;
         }
         req.user = user;
         next();
 
     }catch(err){
-        res.status(400).send("ERROR :" + err.message);
+        next(err)
     }
 }
 

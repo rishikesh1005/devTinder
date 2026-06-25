@@ -5,7 +5,7 @@ const {validateSignUpData} = require("../utils/validation.js")
 const User = require("../models/user.js")
 const bcrypt = require("bcrypt");
 
-authRouter.post("/signup" , async (req,res) => {
+authRouter.post("/signup" , async (req,res,next) => {
     try{
     // validating the data
     validateSignUpData(req);
@@ -37,19 +37,20 @@ authRouter.post("/signup" , async (req,res) => {
             data: savedUser,
         })
     }catch(err) {
-        console.error("error occured:"+ err.message)
-        res.status(400).send("error occured:"+ err.message)
+        next(err);
     }
 })
 
-authRouter.post("/login" , async (req, res) => {
+authRouter.post("/login" , async (req, res,next) => {
  try{
        // get data
     const {emailId , password} = req.body;
 
     const user = await User.findOne({emailId: emailId});
     if(!user){
-        throw new Error("Invalid Credentials!!!");
+        const err = new Error("User does not exist");
+        err.statusCode = 404;
+        throw err;
     }
 
     const isPasswordValid = await user.validatePassword(password);
@@ -63,10 +64,12 @@ authRouter.post("/login" , async (req, res) => {
 
         res.send(user);
     }else{
-        throw new Error("Invalid Credentials!!!");
+        const err = new Error("Invalid Credentials");
+        err.statusCode = 401;
+        throw err;
     }
  }catch(err){
-    res.status(400).send("ERROR : " + err.message);
+    next(err)
  }
 })
 

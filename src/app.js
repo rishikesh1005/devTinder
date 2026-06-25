@@ -11,6 +11,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors")
 const http = require("http")
 const initializeSocket = require("./utils/socket.js");
+const errorHandler = require("./middleware/errorHandler.js")
 
 require('dotenv').config()
 
@@ -32,6 +33,8 @@ app.use("/" , profileRouter)
 app.use("/" , requestRouter)
 app.use("/" , userRouter)
 app.use("/" , chatRouter)
+
+app.use(errorHandler)
 
 const server = http.createServer(app);
 initializeSocket(server);
