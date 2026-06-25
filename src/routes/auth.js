@@ -30,7 +30,12 @@ authRouter.post("/signup" , async (req,res,next) => {
         const token = await savedUser.getJWT();
 
         // pass in the cookies
-        res.cookie("token" , token , {expires : new Date(Date.now() + 8 * 3600000)});
+        res.cookie("token" , token , {
+            expires : new Date(Date.now() + 8 * 3600000),
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        });
 
         res.json({
             message: "user added successfully!!!",
@@ -60,7 +65,12 @@ authRouter.post("/login" , async (req, res,next) => {
         const token = await user.getJWT();
 
         // pass in the cookies
-        res.cookie("token" , token , {expires : new Date(Date.now() + 8 * 3600000)});
+        res.cookie("token" , token , {
+            expires : new Date(Date.now() + 8 * 3600000),
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+        });
 
         res.send(user);
     }else{
@@ -74,9 +84,12 @@ authRouter.post("/login" , async (req, res,next) => {
 })
 
 authRouter.post("/logout" , async (req,res) => {
-    res.cookie("token" , null , {
-        expires: new Date(Date.now())
-    })
+    res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+    });
 
     res.send("loggedOut succesfully!!!");
 })
